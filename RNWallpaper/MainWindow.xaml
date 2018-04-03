@@ -18,7 +18,7 @@
         </Grid.RowDefinitions>
         <Grid fluentWpf:PointerTracker.Enabled="True" Grid.Row="0" Height="25" Margin="5,0">
             <TextBox Name="SearchBox" VerticalContentAlignment="Center" Style="{StaticResource TextBoxRevealStyle}" Margin="0,0,118,0" KeyUp="SearchBox_Keyup"/>
-            <Button Margin="846,0,0,0" Style="{StaticResource ButtonRevealStyle}" Content="Search" Click="SearchButton_Clicked"/>
+            <Button Style="{StaticResource ButtonRevealStyle}" Content="Search" Click="SearchButton_Clicked" HorizontalAlignment="Right" Width="76"/>
         </Grid>
         <ListView Grid.Row="1" Name="AllBackgrounds"
                   Background="Transparent"
@@ -65,10 +65,10 @@
                                 <DockPanel LastChildFill="True" Visibility="Collapsed" 
                                         tz:Transitionz.Opacity="{tz:OpacityParams From=0, To=1, Duration=200, TransitionOn=Visibility}"
                                         tz:Transitionz.Visibility="{Binding RelativeSource={RelativeSource AncestorType=Grid,AncestorLevel=1}, Path=IsMouseOver, Converter={StaticResource b2vConverter}}">
-                                        <local:ImageData DataContext="{Binding}" />
-                                    </DockPanel>
+                                    <local:ImageData DataContext="{Binding}" />
+                                </DockPanel>
                             </Grid>
-                            
+
                         </Border>
                     </WrapPanel>
                 </DataTemplate>
