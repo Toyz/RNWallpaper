@@ -1,0 +1,23 @@
+﻿<UserControl x:Class="RNWallpaper.ImageData"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:RNWallpaper"
+             xmlns:fluentWpf="clr-namespace:SourceChord.FluentWPF;assembly=FluentWPF"
+             xmlns:fa="http://schemas.fontawesome.io/icons/"
+             mc:Ignorable="d" 
+             Name="imageData"
+             fluentWpf:AcrylicWindow.Enabled="True"
+             d:DesignHeight="200" d:DesignWidth="300">
+    <Grid fluentWpf:PointerTracker.Enabled="True">
+        <Button Style="{StaticResource ButtonRevealStyle}" Content="Set Wallpaper" HorizontalAlignment="Center" VerticalAlignment="Bottom" Width="100" Margin="10,0,190,10" Height="30" Click="SetWallPaper_Click"/>
+        <Button Style="{StaticResource ButtonRevealStyle}" Content="View on WH" HorizontalAlignment="Center" VerticalAlignment="Bottom" Width="100" Margin="190,0,10,10" Height="30" Click="OpenOnWH_Click"/>
+        <Button fa:Awesome.Content="Clipboard" Style="{StaticResource ButtonRevealStyle}" TextElement.FontFamily="pack://application:,,,/FontAwesome.WPF;component/#FontAwesome" Margin="275,0,0,175" Click="CopyToClipBoard_Click"/>
+        <TextBlock Name="InfoBlock" HorizontalAlignment="Center" TextWrapping="Wrap" FontSize="32" VerticalAlignment="Center">
+            <Run Text="{Binding Width}" />
+            <Run Text="x" />
+            <Run Text="{Binding Height}" />
+        </TextBlock>
+    </Grid>
+</UserControl>

@@ -2,8 +2,17 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:RNWallpaper"
+             xmlns:converts="clr-namespace:RNWallpaper.Converts"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-         
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/FluentWPF;component/Styles/Colors.Dark.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/FluentWPF;component/Styles/Controls.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <converts:PurityConverter x:Key="PurityConverter" />
+            <BooleanToVisibilityConverter x:Key="b2vConverter"/>
+            <converts:BluParamsWhenTrueConverter x:Key="blurWhenTrue" From="0" To="25" Duration="200" />
+        </ResourceDictionary>
     </Application.Resources>
 </Application>
