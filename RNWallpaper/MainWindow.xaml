@@ -5,12 +5,11 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RNWallpaper"
         xmlns:fluentWpf="clr-namespace:SourceChord.FluentWPF;assembly=FluentWPF"
-        xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
         xmlns:tz="http://schemas.abtsoftware.co.uk/transitionz"
         mc:Ignorable="d"
         Name="mainWindow"
         ResizeMode="CanMinimize"
-        Title="RNWallpaper" Height="764" Width="965">
+        Title="RNWallpaper" Height="680" Width="940">
 
     <Grid>
         <Grid.RowDefinitions>
@@ -37,6 +36,7 @@
                     </Style.Triggers>
                     <Setter Property="Focusable" Value="false"/>
                     <Setter Property="Margin" Value="0"/>
+                    <Setter Property="Padding" Value="0"/>
                 </Style>
             </ListView.ItemContainerStyle>
 
