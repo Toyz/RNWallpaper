@@ -6,24 +6,60 @@
         xmlns:local="clr-namespace:RNWallpaper"
         xmlns:fluentWpf="clr-namespace:SourceChord.FluentWPF;assembly=FluentWPF"
         xmlns:tz="http://schemas.abtsoftware.co.uk/transitionz"
+        xmlns:fa="http://schemas.fontawesome.io/icons/"
         mc:Ignorable="d"
         Name="mainWindow"
         ResizeMode="CanMinimize"
-        Title="RNWallpaper" Height="680" Width="940">
+        Title="RNWallpaper" Height="700" Width="953">
+    
+    <fluentWpf:AcrylicWindow.Resources>
+        <Style TargetType="CheckBox">
+            <Setter Property="IsTabStop" Value="false" />
+        </Style>
+        <Style TargetType="Button">
+            <Setter Property="IsTabStop" Value="false" />
+        </Style>
+        <Style TargetType="ToggleButton">
+            <Setter Property="IsTabStop" Value="false" />
+        </Style>
+        <Style TargetType="fluentWpf:AcrylicPanel">
+            <Setter Property="IsTabStop" Value="false" />
+        </Style>
+    </fluentWpf:AcrylicWindow.Resources>
 
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition />
         </Grid.RowDefinitions>
-        <Grid fluentWpf:PointerTracker.Enabled="True" Grid.Row="0" Height="25" Margin="5,0">
-            <TextBox Name="SearchBox" VerticalContentAlignment="Center" Style="{StaticResource TextBoxRevealStyle}" Margin="0,0,118,0" KeyUp="SearchBox_Keyup"/>
-            <Button Style="{StaticResource ButtonRevealStyle}" Content="Search" Click="SearchButton_Clicked" HorizontalAlignment="Right" Width="76"/>
+        <Grid fluentWpf:PointerTracker.Enabled="True" Grid.Row="0" Height="25" Margin="5,2,5,0">
+            <Grid d:IsHidden="true" IsHitTestVisible="{Binding ElementName=ToggleButtonOptions, Path=IsChecked, Converter={StaticResource InverseBooleanConverter}}" tz:Transitionz.Blur="{Binding ElementName=ToggleButtonOptions, Path=IsChecked, Converter={StaticResource blurWhenTrue}}">
+                <ToggleButton Name="ToggleButtonOptions" fa:Awesome.Content="Wrench" ToolTip="Advanced Search Options" ToolTipService.Placement="Bottom" HorizontalAlignment="Left" Width="25" VerticalAlignment="Center" Height="25"/>
+                <TextBox Name="SearchBox" VerticalContentAlignment="Center" Style="{StaticResource TextBoxRevealStyle}" Margin="30,0,81,0" KeyUp="SearchBox_Keyup"/>
+                <Button Style="{StaticResource ButtonRevealStyle}" Content="Search" Click="SearchButton_Clicked" HorizontalAlignment="Right" Width="76"/>
+            </Grid>
+            <fluentWpf:AcrylicPanel
+                Name="SearchOptionsDialog"
+                Height="25"
+                Focusable="True"
+                tz:Transitionz.Opacity="{tz:OpacityParams From=0, To=1, Duration=200, TransitionOn=Visibility}"
+                tz:Transitionz.Visibility="{Binding ElementName=ToggleButtonOptions, Path=IsChecked, Converter={StaticResource b2vConverter}}" >
+                <Grid>
+                    <CheckBox Content="Anime" IsChecked="{Binding CatAnime}" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,5,0,0"/>
+                    <CheckBox Content="People" IsChecked="{Binding CatPeople}" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="65,5,0,0"/>
+                    <CheckBox Content="General" IsChecked="{Binding CatGeneral}" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="125,5,0,0"/>
+
+                    <CheckBox Content="SFW" IsChecked="{Binding PuritySfw}" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="810,5,0,0"/>
+                    <CheckBox Content="Sketchy" IsChecked="{Binding PuritySketchy}" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="740,5,0,0"/>
+                    <Button Style="{StaticResource ButtonRevealStyle}" HorizontalAlignment="Right" Width="76" Content="Ok" Click="AdvSearchOk_Click" />
+                </Grid>
+            </fluentWpf:AcrylicPanel>
         </Grid>
         <ListView Grid.Row="1" Name="AllBackgrounds"
                   Background="Transparent"
                   BorderBrush="Transparent"
-                  BorderThickness="0,1,0,0"
+                  BorderThickness="0"
+                  Margin="0,5,0,0"
                   ScrollBar.Scroll="bgResults_Scroll">
             <ListView.ItemContainerStyle>
                 <Style TargetType="ListViewItem">
@@ -36,41 +72,37 @@
                     </Style.Triggers>
                     <Setter Property="Focusable" Value="false"/>
                     <Setter Property="Margin" Value="0"/>
-                    <Setter Property="Padding" Value="0"/>
+                    <Setter Property="Padding" Value="2"/>
                 </Style>
             </ListView.ItemContainerStyle>
 
             <ListView.ItemsPanel>
                 <ItemsPanelTemplate>
-                    <WrapPanel
-                        Margin="0"
-                        Width="{Binding (FrameworkElement.ActualWidth), 
-            RelativeSource={RelativeSource AncestorType=ScrollContentPresenter}}"
+                    <WrapPanel Margin="0"
+                               Width="{Binding (FrameworkElement.ActualWidth), 
+                               RelativeSource={RelativeSource AncestorType=ScrollContentPresenter}}"
                                ItemWidth="{Binding (ListView.View).ItemWidth, 
-            RelativeSource={RelativeSource AncestorType=ListView}}"
+                               RelativeSource={RelativeSource AncestorType=ListView}}"
                                MinWidth="{Binding ItemWidth, RelativeSource={RelativeSource Self}}"
                                ItemHeight="{Binding (ListView.View).ItemHeight, 
-            RelativeSource={RelativeSource AncestorType=ListView}}" />
+                               RelativeSource={RelativeSource AncestorType=ListView}}" />
                 </ItemsPanelTemplate>
             </ListView.ItemsPanel>
 
             <ListView.ItemTemplate>
                 <DataTemplate>
-                    <WrapPanel Background="Transparent" Margin="0">
-                        <Border Margin="0" Background="Transparent" BorderThickness="2" BorderBrush="{Binding Path=Purity, Converter={StaticResource PurityConverter}}">
-                            <Grid Margin="0" Background="Transparent">
-                                <Image Margin="0" Name="PreviewImage" Width="300" Height="200" Stretch="Fill" local:ImageAsyncHelper.SourceUri="{Binding ThumbnailUrl, IsAsync=True}"
-                                       tz:Transitionz.Blur="{Binding RelativeSource={RelativeSource AncestorType=WrapPanel,AncestorLevel=1}, Path=IsMouseOver, Converter={StaticResource blurWhenTrue}}"/>
+                    <Border Margin="0" Background="Transparent" BorderThickness="2" BorderBrush="{Binding Path=Purity, Converter={StaticResource PurityConverter}}">
+                        <Grid Margin="0" Background="Transparent">
+                            <Image RenderOptions.BitmapScalingMode="HighQuality" Margin="0" Name="PreviewImage" Width="300" Height="200" Stretch="Fill" local:ImageAsyncHelper.SourceUri="{Binding ThumbnailUrl, IsAsync=True}"
+                                       tz:Transitionz.Blur="{Binding RelativeSource={RelativeSource AncestorType=Grid,AncestorLevel=1} ,Path=IsMouseOver, Converter={StaticResource blurWhenTrue}}"/>
 
-                                <DockPanel LastChildFill="True" Visibility="Collapsed" 
+                            <DockPanel LastChildFill="True" Visibility="Collapsed" 
                                         tz:Transitionz.Opacity="{tz:OpacityParams From=0, To=1, Duration=200, TransitionOn=Visibility}"
                                         tz:Transitionz.Visibility="{Binding RelativeSource={RelativeSource AncestorType=Grid,AncestorLevel=1}, Path=IsMouseOver, Converter={StaticResource b2vConverter}}">
-                                    <local:ImageData DataContext="{Binding}" />
-                                </DockPanel>
-                            </Grid>
-
-                        </Border>
-                    </WrapPanel>
+                                <local:ImageData DataContext="{Binding}" />
+                            </DockPanel>
+                        </Grid>
+                    </Border>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>

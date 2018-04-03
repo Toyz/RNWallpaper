@@ -11,6 +11,8 @@
                 <ResourceDictionary Source="pack://application:,,,/FluentWPF;component/Styles/Controls.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <converts:PurityConverter x:Key="PurityConverter" />
+            <converts:InverseBooleanConverter x:Key="InverseBooleanConverter" />
+            <converts:InverseVisiblityConverter x:Key="InverseVisiblityConverter" />
             <BooleanToVisibilityConverter x:Key="b2vConverter"/>
             <converts:BluParamsWhenTrueConverter x:Key="blurWhenTrue" From="0" To="25" Duration="200" />
         </ResourceDictionary>

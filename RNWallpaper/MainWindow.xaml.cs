@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.Net;
 using System.Threading.Tasks;
 using System.Windows;
@@ -20,12 +22,15 @@ namespace RNWallpaper
         private int _curPage = 1;
         private bool _loadingNextpage;
         private readonly string _appTitle;
+        private ContextBinding _contextData;
 
         public ObservableCollection<Results> BgSearchResults { get; }
 
         public MainWindow()
         {
             InitializeComponent();
+            DataContext = _contextData = new ContextBinding();
+
             _appTitle = Title;
 
             BgSearchResults = new ObservableCollection<Results>();
@@ -34,22 +39,22 @@ namespace RNWallpaper
 
             Task.Run(async () =>
             {
-                await HandleSearching(_curPage);
+                await HandleSearching();
             });
         }
 
-        private async Task HandleSearching(int page = 1)
+        private async Task HandleSearching()
         {
             Dispatcher.Invoke(() =>
             {
-                Title = $"{_appTitle} | (Loading p.{page})";
+                Title = $"{_appTitle} | (Loading p.{_curPage})";
                 SearchBox.IsEnabled = false;
             });
 
             _loadingNextpage = true;
             var jsonFromApi =
                 await (new WebClient()).DownloadStringTaskAsync(
-                    new Uri($"http://127.0.0.1:8080/search?q={_searchQuery}&category=anime,people,general&purity=sketchy,sfw&sort=date_added&page={page}"));
+                    new Uri(createURL()));
 
             var res = SearchResults.FromJson(jsonFromApi);
 
@@ -61,11 +66,56 @@ namespace RNWallpaper
 
             Dispatcher.Invoke(() =>
             {
-                Title = $"{_appTitle} | (p.{page})";
+                Title = $"{_appTitle} | (p.{_curPage})";
                 SearchBox.IsEnabled = true;
             });
         }
 
+        private string createURL()
+        {
+            var purity = new List<string>(2);
+            var category = new List<string>(3);
+
+            var nvc = new NameValueCollection
+            {
+                { "purity", "" },
+                { "q", _searchQuery },
+                { "category", "" },
+                { "sort", "data_added" },
+                { "page", $"{_curPage}" }
+            };
+
+            #region Purity
+            if (_contextData.PuritySfw)
+            {
+                purity.Add("sfw");
+            }
+            if (_contextData.PuritySketchy)
+            {
+                purity.Add("sketchy");
+            }
+            nvc["purity"] = string.Join(",", purity);
+            #endregion
+
+            #region Category
+            if (_contextData.CatAnime)
+            {
+                category.Add("anime");
+            }
+            if (_contextData.CatPeople)
+            {
+                category.Add("people");
+            }
+            if (_contextData.CatGeneral)
+            {
+                category.Add("general");
+            }
+            nvc["category"] = string.Join(",", category);
+            #endregion
+
+            var r = $"http://127.0.0.1:8080/search{nvc.ToQueryString()}";
+            return r;
+        }
 
         private void HandleSearchEvent()
         {
@@ -81,7 +131,7 @@ namespace RNWallpaper
             _curPage = 1;
             Task.Run(async () =>
             {
-                await HandleSearching(_curPage);
+                await HandleSearching();
             });
         }
 
@@ -99,20 +149,24 @@ namespace RNWallpaper
         {
             if (_loadingNextpage) return;
 
-            ScrollBar sb = e.OriginalSource as ScrollBar;
+            var sb = e.OriginalSource as ScrollBar;
 
             if (sb.Orientation == Orientation.Horizontal)
                 return;
 
-            if (sb.Value == sb.Maximum)
+            if (sb.Value != sb.Maximum) return;
+            _loadingNextpage = true; // HACK: Forces newpage to be loading regradless
+            Task.Run(async () =>
             {
-                Task.Run(async () =>
-                {
-                    _curPage += 1;
-                    await HandleSearching(_curPage);
-                });
-            }
+                _curPage += 1;
+                await HandleSearching();
+            });
 
+        }
+
+        private void AdvSearchOk_Click(object sender, RoutedEventArgs e)
+        {
+            ToggleButtonOptions.IsChecked = !ToggleButtonOptions.IsChecked;
         }
     }
 }

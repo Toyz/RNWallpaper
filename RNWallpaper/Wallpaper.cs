@@ -5,7 +5,6 @@ using System.Net;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Media.Imaging;
 using RNWallpaper.Json;
 
@@ -57,7 +56,7 @@ namespace RNWallpaper
 
             var res = Details.FromJson(jsonFromApi);
 
-            string tempPath = Path.Combine(Path.GetTempPath(), Path.GetFileName(res.Url));
+            var tempPath = Path.Combine(Path.GetTempPath(), Path.GetFileName(res.Url));
 
             if (!File.Exists(tempPath))
                 await _client.DownloadFileTaskAsync(new Uri(res.Url), tempPath);
