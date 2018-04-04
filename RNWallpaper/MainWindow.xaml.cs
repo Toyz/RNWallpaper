@@ -22,14 +22,32 @@ namespace RNWallpaper
         private int _curPage = 1;
         private bool _loadingNextpage;
         private readonly string _appTitle;
-        private ContextBinding _contextData;
+        private readonly ContextBinding _contextData;
 
         public ObservableCollection<Results> BgSearchResults { get; }
 
         public MainWindow()
         {
             InitializeComponent();
-            DataContext = _contextData = new ContextBinding();
+            _contextData = new ContextBinding
+            {
+                ImageRatioSizes = new List<string>
+                {
+                    "4x3",
+                    "5x4",
+                    "16x9",
+                    "16x10",
+                    "21x9",
+                    "32x9",
+                    "49x9",
+                    "9x16",
+                    "10x16"
+                }
+            };
+
+            _contextData.SelectedImageRation = _contextData.ImageRatioSizes[2]; // 16x9
+
+            DataContext = _contextData;
 
             _appTitle = Title;
 
@@ -81,8 +99,9 @@ namespace RNWallpaper
                 { "purity", "" },
                 { "q", _searchQuery },
                 { "category", "" },
-                { "sort", "data_added" },
-                { "page", $"{_curPage}" }
+                { "sort", "date_added" },
+                { "page", $"{_curPage}" },
+                { "ratio", "16x9" }
             };
 
             #region Purity
@@ -113,6 +132,10 @@ namespace RNWallpaper
             nvc["category"] = string.Join(",", category);
             #endregion
 
+            #region Ratio
+            nvc["ratio"] = _contextData.SelectedImageRation;
+            #endregion
+
             var r = $"http://127.0.0.1:8080/search{nvc.ToQueryString()}";
             return r;
         }
@@ -123,7 +146,7 @@ namespace RNWallpaper
 
             if (VisualTreeHelper.GetChild(AllBackgrounds, 0) is Decorator border)
             {
-                ScrollViewer scroll = border.Child as ScrollViewer;
+                var scroll = border.Child as ScrollViewer;
                 scroll?.ScrollToTop();
             }
 

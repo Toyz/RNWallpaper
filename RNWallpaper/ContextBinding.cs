@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using RNWallpaper.Annotations;
 
@@ -65,6 +66,30 @@ namespace RNWallpaper
         }
         #endregion
 
+        #region Ratios
+        // ImageRatioSizes
+        private List<string> _imageRations;
+        public List<string> ImageRatioSizes
+        {
+            get => _imageRations;
+            set
+            {
+                _imageRations = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private string _selectedimageRations;
+        public string SelectedImageRation
+        {
+            get => _selectedimageRations;
+            set
+            {
+                _selectedimageRations = value;
+                OnPropertyChanged();
+            }
+        }
+        #endregion
 
         public event PropertyChangedEventHandler PropertyChanged;
 

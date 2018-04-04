@@ -14,8 +14,13 @@ namespace RNWallpaper.Converts
             if (targetType != typeof(Visibility))
                 throw new InvalidOperationException("The target must be a boolean");
 
-            var vis = (Visibility) value;
-            return vis == Visibility.Visible ? Visibility.Collapsed : Visibility.Visible;
+            if (value != null)
+            {
+                var vis = (Visibility) value;
+                return vis == Visibility.Visible ? Visibility.Collapsed : Visibility.Visible;
+            }
+
+            return Visibility.Visible;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter,
