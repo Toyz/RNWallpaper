@@ -78,7 +78,7 @@ namespace RNWallpaper
 
             foreach (var item in res.Results)
             {
-                BgSearchResults.AddOnUI(item);
+                BgSearchResults.AddOnUi(item);
             }
             _loadingNextpage = false;
 
@@ -177,7 +177,7 @@ namespace RNWallpaper
             if (sb.Orientation == Orientation.Horizontal)
                 return;
 
-            if (sb.Value != sb.Maximum) return;
+            if (sb.Value < sb.Maximum - (sb.Maximum * 0.05)) return;
             _loadingNextpage = true; // HACK: Forces newpage to be loading regradless
             Task.Run(async () =>
             {

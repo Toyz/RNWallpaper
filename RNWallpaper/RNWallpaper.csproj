@@ -66,9 +66,12 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="CacheHandler.cs" />
     <Compile Include="ContextBinding.cs" />
+    <Compile Include="Converts\CacheImgConverter.cs" />
     <Compile Include="Converts\InverseVisiblityConverter.cs" />
     <Compile Include="Converts\InverseBooleanConverter.cs" />
+    <Compile Include="Converts\ValueConverterGroup.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Wallpaper.cs" />
     <Page Include="ImageData.xaml">
@@ -86,7 +89,6 @@
     <Compile Include="Converts\BluParamsWhenTrueConverter.cs" />
     <Compile Include="Converts\PurityConverter.cs" />
     <Compile Include="Extensions.cs" />
-    <Compile Include="ImageAsyncHelper.cs" />
     <Compile Include="ImageData.xaml.cs">
       <DependentUpon>ImageData.xaml</DependentUpon>
     </Compile>

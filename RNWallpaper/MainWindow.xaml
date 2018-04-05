@@ -32,8 +32,10 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition />
         </Grid.RowDefinitions>
-        <Grid fluentWpf:PointerTracker.Enabled="True" Grid.Row="0" Height="25" Margin="5,2,5,0">
-            <Grid IsHitTestVisible="{Binding ElementName=ToggleButtonOptions, Path=IsChecked, Converter={StaticResource InverseBooleanConverter}}" tz:Transitionz.Blur="{Binding ElementName=ToggleButtonOptions, Path=IsChecked, Converter={StaticResource blurWhenTrue}}">
+        <Grid fluentWpf:PointerTracker.Enabled="True" Grid.Row="0" Height="25" Margin="5,2,5,0" ZIndex="1000">
+            <Grid 
+                IsHitTestVisible="{Binding ElementName=ToggleButtonOptions, Path=IsChecked, Converter={StaticResource InverseBooleanConverter}}" 
+                tz:Transitionz.Blur="{Binding ElementName=ToggleButtonOptions, Path=IsChecked, Converter={StaticResource blurWhenTrue}}">
                 <ToggleButton Name="ToggleButtonOptions" fa:Awesome.Content="Wrench" ToolTip="Advanced Search Options" ToolTipService.Placement="Bottom" HorizontalAlignment="Left" Width="25" VerticalAlignment="Center" Height="25"/>
                 <TextBox Name="SearchBox" VerticalContentAlignment="Center" Style="{StaticResource TextBoxRevealStyle}" Margin="30,0,176,0" KeyUp="SearchBox_Keyup"/>
                 <Button Style="{StaticResource ButtonRevealStyle}" Content="Search" Click="SearchButton_Clicked" HorizontalAlignment="Right" Width="76"/>
@@ -95,7 +97,8 @@
                 <DataTemplate>
                     <Border Margin="0" Background="Transparent" BorderThickness="2" BorderBrush="{Binding Path=Purity, Converter={StaticResource PurityConverter}}">
                         <Grid Margin="0" Background="Transparent">
-                            <Image RenderOptions.CachingHint="Cache" RenderOptions.EdgeMode="Aliased" RenderOptions.BitmapScalingMode="HighQuality" Margin="0" Name="PreviewImage" Width="300" Height="200" Stretch="Fill" local:ImageAsyncHelper.SourceUri="{Binding ThumbnailUrl, IsAsync=True}"
+                            <Image RenderOptions.CachingHint="Cache" RenderOptions.EdgeMode="Aliased" RenderOptions.BitmapScalingMode="HighQuality" Margin="0" Name="PreviewImage" Width="300" Height="200" Stretch="Fill" 
+                                   Source="{Binding Path=Thumbnail, IsAsync=True, Converter={StaticResource CacheImgConverter}}"
                                        tz:Transitionz.Blur="{Binding RelativeSource={RelativeSource AncestorType=Grid,AncestorLevel=1} ,Path=IsMouseOver, Converter={StaticResource blurWhenTrue}}"/>
 
                             <DockPanel LastChildFill="True" Visibility="Collapsed" 
